@@ -30,3 +30,8 @@ pip install -r requirements.txt
 pip install <whatever>
 pip freeze > requirements.txt
 
+## Tests
+
+```sh
+python -m unittest
+```

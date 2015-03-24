@@ -24,7 +24,7 @@ class BeerServiceMock:
         return '77'
 
 
-class VisbeerServerTestCase(unittest.TestCase):
+class ServerTestCase(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
         app.config['BeerService'] = BeerServiceMock
