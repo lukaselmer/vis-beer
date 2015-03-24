@@ -1,27 +1,7 @@
-import os
-from visbeer.server import app
 import unittest
-import tempfile
 
-
-class BeerServiceMock:
-    lastRfidCallStatus = ''
-    lastRfidCallDispensed = ''
-
-    def __init__(self, rfid):
-        self.rfid = rfid
-
-    def status(self):
-        BeerServiceMock.lastRfidCallStatus = self.rfid
-        if self.rfid == '010101@rfid.ethz.ch':
-            return '1'
-        elif self.rfid == '020202@rfid.ethz.ch':
-            return '2'
-        raise 'bad value'
-
-    def dispensed(self):
-        BeerServiceMock.lastRfidCallDispensed = self.rfid
-        return '77'
+from visbeer.server import app
+from visbeer.test.mocks.beer_service_mock import BeerServiceMock
 
 
 class ServerTestCase(unittest.TestCase):
