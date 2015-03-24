@@ -19,7 +19,7 @@ def index():
 @app.route('/beer/status/<rfid>')
 def beer_rfid(rfid):
     try:
-        ret = app.config.get('BeerService')(str(rfid)).status()
+        ret = str(app.config.get('BeerService')(str(rfid)).status())
         logging.info('beer_rfid: Request with rfid ' + rfid + ' returns with ' + ret)
         return ret
     except Exception as e:
@@ -30,7 +30,7 @@ def beer_rfid(rfid):
 @app.route('/beer/dispensed/<rfid>')
 def beer_dispensed(rfid):
     try:
-        ret = app.config.get('BeerService')(str(rfid)).dispensed()
+        ret = str(app.config.get('BeerService')(str(rfid)).dispensed())
         logging.info('beer_dispensed: Request with rfid ' + rfid + ' returns with ' + ret)
         return ret
     except Exception as e:
