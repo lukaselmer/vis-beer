@@ -28,18 +28,10 @@ class VisbeerServerTestCase(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
         app.config['BeerService'] = BeerServiceMock
-        # self.db_fd, visbeer.app.config['DATABASE'] = tempfile.mkstemp()
-        # visbeer.app.config['TESTING'] = True
-        # visbeer.init_db()
-
-    def tearDown(self):
-        pass
-        # os.close(self.db_fd)
-        # os.unlink(visbeer.app.config['DATABASE'])
 
     def test_home(self):
         rv = self.app.get('/')
-        assert 'api online' in rv.data.decode('utf-8')
+        self.assertEqual('api online', rv.data.decode('utf-8'))
 
     def test_status(self):
         self.assertEqual('1', self.app.get('/beer/status/010101@rfid.ethz.ch').data.decode('utf-8'))
@@ -51,7 +43,7 @@ class VisbeerServerTestCase(unittest.TestCase):
         self.assertEqual('77', self.app.get('/beer/dispensed/010101@rfid.ethz.ch').data.decode('utf-8'))
         self.assertEqual('010101@rfid.ethz.ch', BeerServiceMock.lastRfidCallDispensed)
         self.assertEqual('77', self.app.get('/beer/dispensed/020202@rfid.ethz.ch').data.decode('utf-8'))
-        self.assertEqual('010101@rfid.ethz.ch', BeerServiceMock.lastRfidCallDispensed)
+        self.assertEqual('020202@rfid.ethz.ch', BeerServiceMock.lastRfidCallDispensed)
 
 
 if __name__ == '__main__':

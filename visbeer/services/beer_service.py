@@ -3,7 +3,7 @@ class BeerService:
         self.rfid = rfid
 
     def status(self):
-        return '7777'
+        return 'TODO'
 
     def dispensed(self):
-        return '8888'
+        return 'TODO'
