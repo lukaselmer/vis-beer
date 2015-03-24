@@ -16,12 +16,12 @@ def index():
 
 @app.route('/beer/status/<rfid>')
 def beer_rfid(rfid):
-    return app.config.get('BeerService')(rfid).status()
+    return app.config.get('BeerService')(str(rfid)).status()
 
 
 @app.route('/beer/dispensed/<rfid>')
 def beer_dispensed(rfid):
-    return app.config.get('BeerService')(rfid).dispensed()
+    return app.config.get('BeerService')(str(rfid)).dispensed()
 
 
 if __name__ == '__main__':
