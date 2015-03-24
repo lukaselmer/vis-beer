@@ -7,7 +7,11 @@ app.config.from_object(__name__)
 
 @app.route('/')
 def index():
-    return "Hello, World!"
+    return "api online"
+
+@app.route('/beer/<legi>')
+def beer_legi(legi):
+    return legi
 
 if __name__ == '__main__':
     app.run(debug=True)

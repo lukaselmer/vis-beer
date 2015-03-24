@@ -19,7 +19,7 @@ class VisbeerTestCase(unittest.TestCase):
     def test_home(self):
         rv = self.app.get('/')
         print(rv.data)
-        assert 'Hello, World!' in rv.data.decode('utf-8')
+        assert 'api online' in rv.data.decode('utf-8')
 
 
 if __name__ == '__main__':
