@@ -1,8 +1,13 @@
 #!/usr/bin/env python
 
 import logging
-from flask import Flask
+from flask import Flask, request, abort
+from functools import wraps
 from visbeer.services.beer_service import BeerService
+
+
+# TODO: move this to a config file
+API_KEY = 'llxPd3Krm2y4dLMa5YGCkLumvx0Mb1DZaZiPH'
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -11,12 +16,35 @@ app.config.from_object(__name__)
 app.config['BeerService'] = BeerService
 
 
+def get_api_key():
+    return API_KEY
+
+
+def require_api_key(view_function):
+    # the new, post-decoration function. Note *args and **kwargs here.
+    @wraps(view_function)
+    def decorated_function(*args, **kwargs):
+        if request.args.get('key') and request.args.get('key') == get_api_key():
+            return view_function(*args, **kwargs)
+        else:
+            abort(401)
+
+    return decorated_function
+
+
 @app.route('/')
 def index():
     return 'api online'
 
 
+@app.route('/validate_key')
+@require_api_key
+def validate_key():
+    return 'API key is valid'
+
+
 @app.route('/beer/status/<rfid>')
+@require_api_key
 def beer_rfid(rfid):
     try:
         ret = str(app.config.get('BeerService')(str(rfid)).status())
@@ -28,6 +56,7 @@ def beer_rfid(rfid):
 
 
 @app.route('/beer/dispensed/<rfid>')
+@require_api_key
 def beer_dispensed(rfid):
     try:
         ret = str(app.config.get('BeerService')(str(rfid)).dispensed())
