@@ -3,10 +3,12 @@ from visbeer.test.mocks.person_mock import PersonMock
 
 class DataServiceMock:
     def __init__(self):
-        self.data = {}
+        self.data = {'persons': {}}
 
     def find_person(self, rfid):
-        return PersonMock(rfid)
+        if not rfid in self.data['persons']:
+            self.data['persons'] = PersonMock(rfid)
+        return self.data['persons']
 
     def get_flag_value(self, person, flag_name):
         res = self.get_person_data(person).get(flag_name, None)
