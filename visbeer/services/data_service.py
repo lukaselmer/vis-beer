@@ -7,8 +7,9 @@ class DataService:
         return None
 
     def get_flag_value(self, person, flag_name):
-        # TODO: implement this, use flags
-        return None
+        res = None  # TODO: implement this, use flags
+
+        return res if res is None else str(res)
 
     def set_flag_value(self, person, flag_name, new_value):
         # TODO: implement this, use flags
