@@ -6,7 +6,7 @@ from functools import wraps
 from visbeer.services.beer_service import BeerService
 
 
-# TODO: move this to a config file
+# TODO: create a new API key and move it to a config file
 API_KEY = 'llxPd3Krm2y4dLMa5YGCkLumvx0Mb1DZaZiPH'
 
 app = Flask(__name__)
