@@ -2,15 +2,19 @@
 
 ## Setup
 
-* Install python 3.4
-* Install virtualenvwrapper
-
-Make sure that this has been added to your environment (e.g. .zprofile, .profile):
+* Install [pyenv](https://github.com/yyuu/pyenv) and [pyenv-virtualenv](https://github.com/yyuu/pyenv-virtualenv)
 
 ```sh
-export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
-export WORKON_HOME=~/.virtualenvs
-source /usr/local/bin/virtualenvwrapper.sh
+pyenv install
+```
+
+* Install virtualenvwrapper
+
+Make sure that this has been added to your environment (e.g. .zshrc):
+
+```sh
+eval "$(pyenv init - zsh)"
+eval "$(pyenv virtualenv-init -)"
 ```
 
 Clone the project, setup virtualenv and install dependencies:
@@ -18,14 +22,15 @@ Clone the project, setup virtualenv and install dependencies:
 ```sh
 git clone git@github.com:VIS-ETH/vis-beer.git
 cd vis-beer
-mkvirtualenv vis-beer
+pyenv virtualenv 2.7.9 vis-beer-2.7.9
+pyenv activate vis-beer-2.7.9
 pip install -r requirements.txt
 ```
 
 ## Usage
 
 ```sh
-workon vis-beer
+pyenv activate vis-beer-2.7.9
 pip install -r requirements.txt
 ```
 
@@ -39,5 +44,5 @@ pip freeze > requirements.txt
 ## Tests
 
 ```sh
-python -m unittest
+python -m unittest discover
 ```
