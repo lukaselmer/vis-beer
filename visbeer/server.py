@@ -1,30 +1,24 @@
 #!/usr/bin/env python
 
 import logging
+import os
 from flask import Flask, request, abort
 from functools import wraps
 from visbeer.services.beer_service import BeerService
-
-
-# TODO: create a new API key and move it to a config file
-API_KEY = 'llxPd3Krm2y4dLMa5YGCkLumvx0Mb1DZaZiPH'
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 
 # set as config, so we can use dependency injection for the tests
 app.config['BeerService'] = BeerService
-
-
-def get_api_key():
-    return API_KEY
+app.config['ApiKey'] = os.getenv('API_KEY', None)
 
 
 def require_api_key(view_function):
     # the new, post-decoration function. Note *args and **kwargs here.
     @wraps(view_function)
     def decorated_function(*args, **kwargs):
-        if request.args.get('key') and request.args.get('key') == get_api_key():
+        if request.args.get('key') and request.args.get('key') == app.config['ApiKey']:
             return view_function(*args, **kwargs)
         else:
             abort(401)
@@ -65,7 +59,3 @@ def beer_dispensed(rfid):
     except Exception as e:
         logging.error('beer_dispensed: An error has occurred with rfid ' + rfid)
         logging.exception(e)
-
-
-if __name__ == '__main__':
-    app.run(debug=True)

@@ -25,4 +25,3 @@ class DataServiceMock:
         if not person.rfid in self.data:
             self.data[person.rfid] = {}
         return self.data[person.rfid]
-

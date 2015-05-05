@@ -32,6 +32,7 @@ pip install -r requirements.txt
 ```sh
 pyenv activate vis-beer-2.7.9
 pip install -r requirements.txt
+API_KEY=llxPd3Krm2y4dLMa5YGCkLumvx0Mb1DZaZiPH python run-server.py
 ```
 
 ## Install New Requirements
