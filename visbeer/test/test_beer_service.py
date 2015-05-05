@@ -93,15 +93,18 @@ class ServerTestCase(unittest.TestCase):
 
         self.assertEqual(1, bs.status())
         bs.dispensed()
+        self.assertEqual(0, bs.status())
+        bs.dispensed()
+        self.assertEqual(0, bs.status())
 
-        # TODO: implement this
-        #self.assertEqual(0, bs.status())
-        #bs.dispensed()
-        #self.assertEqual(0, bs.status())
-        #bs.dispensed()
-        #self.assertEqual(0, bs.status())
-        #bs.dispensed()
-        #self.assertEqual(0, bs.status())
+        mock.data['010101@rfid.ethz.ch']['remaining'] = 2
+        self.assertEqual(2, bs.status())
+        bs.dispensed()
+        self.assertEqual(1, bs.status())
+        bs.dispensed()
+        self.assertEqual(0, bs.status())
+        bs.dispensed()
+        self.assertEqual(0, bs.status())
 
 
 if __name__ == '__main__':

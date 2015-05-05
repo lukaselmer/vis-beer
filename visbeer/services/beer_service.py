@@ -47,7 +47,15 @@ class BeerService:
         return self.get_remaining()
 
     def dispensed(self):
-        return self.status()
+        remaining_beers = self.status()
+        if remaining_beers <= 0:
+            # Uh oh, something went wrong!?
+            return 0
+
+        self.data_service.set_flag_value(self.person, 'last', datetime.datetime.now().strftime(DATETIME_FORMAT))
+        self.data_service.set_flag_value(self.person, 'remaining', remaining_beers - 1)
+
+        return remaining_beers
 
     def no_limit(self):
         return self.data_service.get_flag_value(self.person, 'nolimit')
