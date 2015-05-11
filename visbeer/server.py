@@ -5,11 +5,14 @@ import os
 from flask import Flask, request, abort
 from functools import wraps
 from visbeer.services.beer_service import BeerService
+from visbeer.services.data_service import DataService
+from visbeer.services.flag_service import FlagService
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 
 # set as config, so we can use dependency injection for the tests
+app.config['FlagService'] = FlagService
 app.config['BeerService'] = BeerService
 app.config['ApiKey'] = os.getenv('API_KEY', None)
 
@@ -24,6 +27,12 @@ def require_api_key(view_function):
             abort(401)
 
     return decorated_function
+
+
+def get_beer_service(rfid):
+    flag_service = app.config.get('FlagService')()
+    beer_service = app.config.get('BeerService')(str(rfid), DataService(flag_service))
+    return beer_service
 
 
 @app.route('/')
@@ -41,7 +50,7 @@ def validate_key():
 @require_api_key
 def beer_rfid(rfid):
     try:
-        ret = str(app.config.get('BeerService')(str(rfid)).status())
+        ret = str(get_beer_service(rfid).status())
         logging.info('beer_rfid: Request with rfid ' + rfid + ' returns with ' + ret)
         return ret
     except Exception as e:
@@ -53,7 +62,7 @@ def beer_rfid(rfid):
 @require_api_key
 def beer_dispensed(rfid):
     try:
-        ret = str(app.config.get('BeerService')(str(rfid)).dispensed())
+        ret = str(get_beer_service(rfid).dispensed())
         logging.info('beer_dispensed: Request with rfid ' + rfid + ' returns with ' + ret)
         return ret
     except Exception as e:

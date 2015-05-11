@@ -2,7 +2,7 @@ class BeerServiceMock:
     lastRfidCallStatus = ''
     lastRfidCallDispensed = ''
 
-    def __init__(self, rfid):
+    def __init__(self, rfid, data_service):
         self.rfid = rfid
 
     def status(self):

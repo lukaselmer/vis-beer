@@ -3,37 +3,38 @@ import datetime
 
 from visbeer.services.beer_service import BeerService
 from visbeer.services.beer_service import DATETIME_FORMAT
-from visbeer.test.mocks.data_service_mock import DataServiceMock
+from visbeer.services.data_service import DataService
+from visbeer.test.mocks.flag_service_mock import FlagServiceMock
 
 
-class ServerTestCase(unittest.TestCase):
+class BeerServiceTestCase(unittest.TestCase):
     def test_ctor(self):
-        self.assertEqual('010101@rfid.ethz.ch', BeerService('010101@rfid.ethz.ch').rfid)
-        self.assertEqual('010203@rfid.ethz.ch', BeerService('010203@rfid.ethz.ch').rfid)
+        self.assertEqual('010101@rfid.ethz.ch', BeerService('010101@rfid.ethz.ch', DataService(FlagServiceMock())).rfid)
+        self.assertEqual('010203@rfid.ethz.ch', BeerService('010203@rfid.ethz.ch', DataService(FlagServiceMock())).rfid)
 
     def test_invalid_rfid(self):
         with self.assertRaises(Exception):
-            BeerService('12345@rfid.ethz.ch')
+            BeerService('12345@rfid.ethz.ch', None)
         with self.assertRaises(Exception):
-            BeerService('1234567@rfid.ethz.ch')
+            BeerService('1234567@rfid.ethz.ch', None)
         with self.assertRaises(Exception):
-            BeerService('@rfid.ethz.ch')
+            BeerService('@rfid.ethz.ch', None)
         with self.assertRaises(Exception):
-            BeerService('rfid.ethz.ch')
+            BeerService('rfid.ethz.ch', None)
         with self.assertRaises(Exception):
-            BeerService('awefefw@rfid.ethz.ch')
+            BeerService('awefefw@rfid.ethz.ch', None)
         with self.assertRaises(Exception):
-            BeerService('awefefw@')
+            BeerService('awefefw@', None)
         with self.assertRaises(Exception):
-            BeerService('awefefw@whatever.com')
+            BeerService('awefefw@whatever.com', None)
         with self.assertRaises(Exception):
-            BeerService('234234')
+            BeerService('234234', None)
         with self.assertRaises(Exception):
-            BeerService('234@2q3r')
+            BeerService('234@2q3r', None)
 
     def test_status(self):
-        mock = DataServiceMock()
-        bs = BeerService('010101@rfid.ethz.ch', mock)
+        mock = FlagServiceMock()
+        bs = BeerService('010101@rfid.ethz.ch', DataService(mock))
 
         self.assertEqual(1, bs.status())
 
@@ -88,8 +89,8 @@ class ServerTestCase(unittest.TestCase):
         self.assertEqual(0, bs.status())
 
     def test_status_and_dispensed(self):
-        mock = DataServiceMock()
-        bs = BeerService('010101@rfid.ethz.ch', mock)
+        mock = FlagServiceMock()
+        bs = BeerService('010101@rfid.ethz.ch', DataService(mock))
 
         self.assertEqual(1, bs.status())
         bs.dispensed()

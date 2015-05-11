@@ -24,7 +24,7 @@ def validate_rfid(rfid):
 
 
 class BeerService:
-    def __init__(self, rfid, data_service=DataService()):
+    def __init__(self, rfid, data_service):
         validate_rfid(rfid)
 
         self.rfid = rfid
@@ -42,7 +42,7 @@ class BeerService:
 
         if not self.has_consumed_today():
             # no consumption today -> reset the remaining value
-            self.data_service.set_flag_value(self.person, 'remaining', self.beers_per_day())
+            self.data_service.set_beer_remaining(self.person, self.beers_per_day())
 
         return self.get_remaining()
 
@@ -52,20 +52,20 @@ class BeerService:
             # Uh oh, something went wrong!?
             return 0
 
-        self.data_service.set_flag_value(self.person, 'last', datetime.datetime.now().strftime(DATETIME_FORMAT))
-        self.data_service.set_flag_value(self.person, 'remaining', remaining_beers - 1)
+        self.data_service.set_beer_last(self.person, datetime.datetime.now().strftime(DATETIME_FORMAT))
+        self.data_service.set_beer_remaining(self.person, remaining_beers - 1)
 
         return remaining_beers
 
     def no_limit(self):
-        return self.data_service.get_flag_value(self.person, 'nolimit')
+        return self.data_service.get_beer_nolimit(self.person)
 
     def beers_per_day(self):
-        self.data_service.set_default_flag_value(self.person, 'perday', DEFAULT_BEERS_PER_DAY)
-        return self.data_service.get_flag_value(self.person, 'perday')
+        self.data_service.set_default_beers_per_day(self.person, DEFAULT_BEERS_PER_DAY)
+        return self.data_service.get_beer_per_day(self.person)
 
     def get_remaining(self):
-        remaining_beers = int(self.data_service.get_flag_value(self.person, 'remaining') or self.beers_per_day())
+        remaining_beers = int(self.data_service.get_beer_remaining(self.person) or self.beers_per_day())
         # for every 2 coffees, subtract on beer (at least)
         beers_exchanged_for_coffee = int(math.ceil(self.dispensed_coffees_today() / 2.0))
         return max(0, remaining_beers - beers_exchanged_for_coffee)
@@ -73,11 +73,11 @@ class BeerService:
     def dispensed_coffees_today(self):
         # TODO: make data service coffee or beer specific
         if self.has_consumed_today():
-            return int(self.data_service.get_flag_value(self.person, 'dispensed_today') or 0)
+            return int(self.data_service.get_beer_dispensed_today(self.person) or 0)
         return 0
 
     def has_consumed_today(self):
-        last_consumption_str = self.data_service.get_flag_value(self.person, 'last')
+        last_consumption_str = self.data_service.get_beer_last(self.person)
 
         if not last_consumption_str:
             # this is the case if someone never consumed a beverage until now

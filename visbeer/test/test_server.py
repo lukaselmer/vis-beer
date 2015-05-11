@@ -1,13 +1,14 @@
 import unittest
-import os
 
 from visbeer.server import app
 from visbeer.test.mocks.beer_service_mock import BeerServiceMock
+from visbeer.test.mocks.flag_service_mock import FlagServiceMock
 
 
 class ServerTestCase(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
+        app.config['FlagService'] = FlagServiceMock
         app.config['BeerService'] = BeerServiceMock
         app.config['ApiKey'] = 'llxPd3Krm2y4dLMa5YGCkLumvx0Mb1DZaZiPH'
 
