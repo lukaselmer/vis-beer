@@ -2,6 +2,7 @@ import re
 import datetime
 
 ENABLE_BEER_CONSUMPTION = True
+ENABLE_COFFEE_CONSUMPTION = True
 DEFAULT_CREDITS_PER_DAY = 2
 RFID_REGEX = re.compile(r"[0-9]{6}@rfid\.ethz\.ch")
 
