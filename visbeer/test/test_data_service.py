@@ -18,12 +18,12 @@ class DataServiceTestCase(unittest.TestCase):
 
     def test_no_limit(self):
         self.assertEqual(None, self.ds.get_beer_no_limit(self.person1))
-        self.mock.data[self.rfid1]['nolimit'] = 1
+        self.mock.data[self.rfid1]['beer|nolimit'] = 1
         self.assertEqual('1', self.ds.get_beer_no_limit(self.person1))
 
-    def test_no_limit(self):
+    def test_dispensed_today(self):
         self.assertEqual(None, self.ds.get_beer_dispensed_today(self.person1))
-        self.mock.data[self.rfid1]['dispensed_today'] = 1
+        self.mock.data[self.rfid1]['beer|dispensed_today'] = 1
         self.assertEqual('1', self.ds.get_beer_dispensed_today(self.person1))
 
     def test_beer_per_day(self):

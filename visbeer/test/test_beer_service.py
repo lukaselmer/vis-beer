@@ -38,54 +38,54 @@ class BeerServiceTestCase(unittest.TestCase):
 
         self.assertEqual(1, bs.status())
 
-        mock.data['010101@rfid.ethz.ch']['perday'] = 10
-        mock.data['010101@rfid.ethz.ch']['remaining'] = 10
+        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 10
+        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 10
         self.assertEqual(10, bs.status())
 
-        mock.data['010101@rfid.ethz.ch']['perday'] = 10
-        mock.data['010101@rfid.ethz.ch']['remaining'] = None
+        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 10
+        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = None
         self.assertEqual(10, bs.status())
 
-        mock.data['010101@rfid.ethz.ch']['perday'] = 10
-        mock.data['010101@rfid.ethz.ch']['remaining'] = 5
+        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 10
+        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 5
         three_years_ago = (datetime.datetime.now() - datetime.timedelta(days=3 * 365)).strftime(DATETIME_FORMAT)
-        mock.data['010101@rfid.ethz.ch']['last'] = three_years_ago
+        mock.data['010101@rfid.ethz.ch']['beer|last'] = three_years_ago
         self.assertEqual(10, bs.status())
 
-        mock.data['010101@rfid.ethz.ch']['perday'] = 10
-        mock.data['010101@rfid.ethz.ch']['remaining'] = 5
+        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 10
+        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 5
         one_day_ago = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime(DATETIME_FORMAT)
-        mock.data['010101@rfid.ethz.ch']['last'] = one_day_ago
+        mock.data['010101@rfid.ethz.ch']['beer|last'] = one_day_ago
         self.assertEqual(10, bs.status())
 
-        mock.data['010101@rfid.ethz.ch']['perday'] = 10
-        mock.data['010101@rfid.ethz.ch']['remaining'] = 5
-        mock.data['010101@rfid.ethz.ch']['last'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
+        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 10
+        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 5
+        mock.data['010101@rfid.ethz.ch']['beer|last'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
         self.assertEqual(5, bs.status())
 
-        mock.data['010101@rfid.ethz.ch']['perday'] = 10
-        mock.data['010101@rfid.ethz.ch']['remaining'] = 2
-        mock.data['010101@rfid.ethz.ch']['last'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
+        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 10
+        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 2
+        mock.data['010101@rfid.ethz.ch']['beer|last'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
         self.assertEqual(2, bs.status())
 
-        mock.data['010101@rfid.ethz.ch']['perday'] = 10
-        mock.data['010101@rfid.ethz.ch']['remaining'] = 1
-        mock.data['010101@rfid.ethz.ch']['last'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
+        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 10
+        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 1
+        mock.data['010101@rfid.ethz.ch']['beer|last'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
         self.assertEqual(1, bs.status())
 
-        mock.data['010101@rfid.ethz.ch']['perday'] = 1
-        mock.data['010101@rfid.ethz.ch']['remaining'] = 1
-        mock.data['010101@rfid.ethz.ch']['last'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
+        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 1
+        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 1
+        mock.data['010101@rfid.ethz.ch']['beer|last'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
         self.assertEqual(1, bs.status())
 
-        mock.data['010101@rfid.ethz.ch']['perday'] = 1
-        mock.data['010101@rfid.ethz.ch']['remaining'] = 0
-        mock.data['010101@rfid.ethz.ch']['last'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
+        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 1
+        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 0
+        mock.data['010101@rfid.ethz.ch']['beer|last'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
         self.assertEqual(0, bs.status())
 
-        mock.data['010101@rfid.ethz.ch']['perday'] = 10
-        mock.data['010101@rfid.ethz.ch']['remaining'] = 0
-        mock.data['010101@rfid.ethz.ch']['last'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
+        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 10
+        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 0
+        mock.data['010101@rfid.ethz.ch']['beer|last'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
         self.assertEqual(0, bs.status())
 
     def test_status_and_dispensed(self):
@@ -98,7 +98,7 @@ class BeerServiceTestCase(unittest.TestCase):
         bs.dispensed()
         self.assertEqual(0, bs.status())
 
-        mock.data['010101@rfid.ethz.ch']['remaining'] = 2
+        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 2
         self.assertEqual(2, bs.status())
         bs.dispensed()
         self.assertEqual(1, bs.status())
