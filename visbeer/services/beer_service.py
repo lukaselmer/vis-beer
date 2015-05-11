@@ -33,7 +33,8 @@ class BeerService:
             return 0
 
         self.data_service.set_last(self.person, datetime.datetime.now())
-        self.data_service.set_credits(self.person, (remaining_beers - 1) * 2)
+        remaining_credits = self.data_service.remaining_credits(self.person)
+        self.data_service.set_credits(self.person, remaining_credits - 2)
 
         return remaining_beers - 1
 
