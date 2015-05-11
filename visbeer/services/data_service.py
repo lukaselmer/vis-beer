@@ -1,3 +1,8 @@
+import datetime
+
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+
+
 class DataService:
     def __init__(self, flag_service):
         self.flag_service = flag_service
@@ -5,26 +10,30 @@ class DataService:
     def find_person(self, rfid):
         return self.flag_service.find_person(rfid)
 
-    def get_beer_no_limit(self, person):
-        return self.flag_service.get_flag_value('beer', person, 'nolimit')
+    def is_developer(self, person):
+        val = self.flag_service.get_flag_value('coffee_beer', person, 'developer')
+        return val and len(val) >= 1
 
-    def get_beer_per_day(self, person):
-        return self.flag_service.get_flag_value('beer', person, 'perday')
+    def get_last(self, person):
+        raw = self.flag_service.get_flag_value('coffee_beer', person, 'last_consumption')
 
-    def set_default_beers_per_day(self, person, default):
-        self.flag_service.set_default_flag_value('beer', person, 'perday', default)
+        if not raw:
+            return None
 
-    def get_beer_remaining(self, person):
-        return self.flag_service.get_flag_value('beer', person, 'remaining')
+        return datetime.datetime.strptime(raw, DATETIME_FORMAT)
 
-    def set_beer_remaining(self, person, amount):
-        self.flag_service.set_flag_value('beer', person, 'remaining', amount)
+    def set_last(self, person, last_time):
+        raw = last_time.strftime(DATETIME_FORMAT)
+        self.flag_service.set_flag_value('coffee_beer', person, 'last_consumption', raw)
 
-    def get_beer_dispensed_today(self, person):
-        return self.flag_service.get_flag_value('beer', person, 'dispensed_today')
+    def get_credits_per_day(self, person):
+        return int(self.flag_service.get_flag_value('coffee_beer', person, 'credits_per_day'))
 
-    def get_beer_last(self, person):
-        return self.flag_service.get_flag_value('beer', person, 'last')
+    def set_default_credits_per_day(self, person, default):
+        self.flag_service.set_default_flag_value('coffee_beer', person, 'credits_per_day', int(default))
 
-    def set_beer_last(self, person, last_time):
-        self.flag_service.set_flag_value('beer', person, 'last', last_time)
+    def get_credits(self, person):
+        return int(self.flag_service.get_flag_value('coffee_beer', person, 'credits'))
+
+    def set_credits(self, person, amount):
+        self.flag_service.set_flag_value('coffee_beer', person, 'credits', int(amount))

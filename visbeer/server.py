@@ -31,8 +31,7 @@ def require_api_key(view_function):
 
 def get_beer_service(rfid):
     flag_service = app.config.get('FlagService')()
-    beer_service = app.config.get('BeerService')(str(rfid), DataService(flag_service))
-    return beer_service
+    return app.config.get('BeerService')(str(rfid), DataService(flag_service))
 
 
 @app.route('/')

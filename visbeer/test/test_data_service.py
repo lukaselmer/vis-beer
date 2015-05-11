@@ -1,8 +1,6 @@
 import unittest
 import datetime
 
-from visbeer.services.beer_service import BeerService
-from visbeer.services.beer_service import DATETIME_FORMAT
 from visbeer.services.data_service import DataService
 from visbeer.test.mocks.flag_service_mock import FlagServiceMock
 
@@ -16,36 +14,28 @@ class DataServiceTestCase(unittest.TestCase):
         self.person2 = self.mock.find_person(self.rfid2)
         self.ds = DataService(self.mock)
 
-    def test_no_limit(self):
-        self.assertEqual(None, self.ds.get_beer_no_limit(self.person1))
-        self.mock.data[self.rfid1]['beer|nolimit'] = 1
-        self.assertEqual('1', self.ds.get_beer_no_limit(self.person1))
-
-    def test_dispensed_today(self):
-        self.assertEqual(None, self.ds.get_beer_dispensed_today(self.person1))
-        self.mock.data[self.rfid1]['beer|dispensed_today'] = 1
-        self.assertEqual('1', self.ds.get_beer_dispensed_today(self.person1))
+    def test_is_developer(self):
+        self.assertFalse(self.ds.is_developer(self.person1))
+        self.mock.data[self.rfid1]['coffee_beer|developer'] = '1'
+        self.assertTrue(self.ds.is_developer(self.person1))
 
     def test_beer_per_day(self):
-        self.assertEqual(None, self.ds.get_beer_per_day(self.person1))
-        self.ds.set_default_beers_per_day(self.person1, 10)
-        self.assertEqual('10', self.ds.get_beer_per_day(self.person1))
-        self.ds.set_default_beers_per_day(self.person1, 20)
-        self.assertEqual('10', self.ds.get_beer_per_day(self.person1))
+        self.ds.set_default_credits_per_day(self.person1, 10)
+        self.assertEqual(10, self.ds.get_credits_per_day(self.person1))
+        self.ds.set_default_credits_per_day(self.person1, 20)
+        self.assertEqual(10, self.ds.get_credits_per_day(self.person1))
 
     def test_beer_remaining(self):
-        self.assertEqual(None, self.ds.get_beer_remaining(self.person1))
-        self.ds.set_beer_remaining(self.person1, 10)
-        self.assertEqual('10', self.ds.get_beer_remaining(self.person1))
-        self.ds.set_beer_remaining(self.person1, 20)
-        self.assertEqual('20', self.ds.get_beer_remaining(self.person1))
+        self.ds.set_credits(self.person1, 10)
+        self.assertEqual(10, self.ds.get_credits(self.person1))
+        self.ds.set_credits(self.person1, 20)
+        self.assertEqual(20, self.ds.get_credits(self.person1))
 
     def test_beer_last(self):
-        self.assertEqual(None, self.ds.get_beer_last(self.person1))
-        self.ds.set_beer_last(self.person1, 10)
-        self.assertEqual('10', self.ds.get_beer_last(self.person1))
-        self.ds.set_beer_last(self.person1, 20)
-        self.assertEqual('20', self.ds.get_beer_last(self.person1))
+        self.assertEqual(None, self.ds.get_last(self.person1))
+        nearly_now = datetime.datetime.now().replace(microsecond=0)
+        self.ds.set_last(self.person1, nearly_now)
+        self.assertEqual(nearly_now, self.ds.get_last(self.person1))
 
 
 if __name__ == '__main__':

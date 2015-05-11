@@ -2,8 +2,7 @@ import unittest
 import datetime
 
 from visbeer.services.beer_service import BeerService
-from visbeer.services.beer_service import DATETIME_FORMAT
-from visbeer.services.data_service import DataService
+from visbeer.services.data_service import DataService, DATETIME_FORMAT
 from visbeer.test.mocks.flag_service_mock import FlagServiceMock
 
 
@@ -38,54 +37,54 @@ class BeerServiceTestCase(unittest.TestCase):
 
         self.assertEqual(1, bs.status())
 
-        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 10
-        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 10
-        self.assertEqual(10, bs.status())
-
-        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 10
-        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = None
-        self.assertEqual(10, bs.status())
-
-        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 10
-        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 5
-        three_years_ago = (datetime.datetime.now() - datetime.timedelta(days=3 * 365)).strftime(DATETIME_FORMAT)
-        mock.data['010101@rfid.ethz.ch']['beer|last'] = three_years_ago
-        self.assertEqual(10, bs.status())
-
-        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 10
-        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 5
-        one_day_ago = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime(DATETIME_FORMAT)
-        mock.data['010101@rfid.ethz.ch']['beer|last'] = one_day_ago
-        self.assertEqual(10, bs.status())
-
-        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 10
-        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 5
-        mock.data['010101@rfid.ethz.ch']['beer|last'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits_per_day'] = 10
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits'] = 10
         self.assertEqual(5, bs.status())
 
-        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 10
-        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 2
-        mock.data['010101@rfid.ethz.ch']['beer|last'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits_per_day'] = 10
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits'] = None
+        self.assertEqual(5, bs.status())
+
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits_per_day'] = 10
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits'] = 5
+        three_years_ago = (datetime.datetime.now() - datetime.timedelta(days=3 * 365)).strftime(DATETIME_FORMAT)
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|last_consumption'] = three_years_ago
+        self.assertEqual(5, bs.status())
+
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits_per_day'] = 10
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits'] = 5
+        one_day_ago = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime(DATETIME_FORMAT)
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|last_consumption'] = one_day_ago
+        self.assertEqual(5, bs.status())
+
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits_per_day'] = 10
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits'] = 5
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|last_consumption'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
         self.assertEqual(2, bs.status())
 
-        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 10
-        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 1
-        mock.data['010101@rfid.ethz.ch']['beer|last'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits_per_day'] = 10
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits'] = 2
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|last_consumption'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
         self.assertEqual(1, bs.status())
 
-        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 1
-        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 1
-        mock.data['010101@rfid.ethz.ch']['beer|last'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
-        self.assertEqual(1, bs.status())
-
-        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 1
-        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 0
-        mock.data['010101@rfid.ethz.ch']['beer|last'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits_per_day'] = 10
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits'] = 1
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|last_consumption'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
         self.assertEqual(0, bs.status())
 
-        mock.data['010101@rfid.ethz.ch']['beer|perday'] = 10
-        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 0
-        mock.data['010101@rfid.ethz.ch']['beer|last'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits_per_day'] = 1
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits'] = 1
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|last_consumption'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
+        self.assertEqual(0, bs.status())
+
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits_per_day'] = 1
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits'] = 0
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|last_consumption'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
+        self.assertEqual(0, bs.status())
+
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits_per_day'] = 10
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits'] = 0
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|last_consumption'] = datetime.datetime.now().strftime(DATETIME_FORMAT)
         self.assertEqual(0, bs.status())
 
     def test_status_and_dispensed(self):
@@ -98,11 +97,13 @@ class BeerServiceTestCase(unittest.TestCase):
         bs.dispensed()
         self.assertEqual(0, bs.status())
 
-        mock.data['010101@rfid.ethz.ch']['beer|remaining'] = 2
+        mock.data['010101@rfid.ethz.ch']['coffee_beer|credits'] = 4
         self.assertEqual(2, bs.status())
         bs.dispensed()
+        self.assertEqual(2, mock.data['010101@rfid.ethz.ch']['coffee_beer|credits'])
         self.assertEqual(1, bs.status())
         bs.dispensed()
+        self.assertEqual(0, mock.data['010101@rfid.ethz.ch']['coffee_beer|credits'])
         self.assertEqual(0, bs.status())
         bs.dispensed()
         self.assertEqual(0, bs.status())
