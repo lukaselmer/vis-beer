@@ -20,22 +20,22 @@ class DataServiceTestCase(unittest.TestCase):
         self.assertTrue(self.ds.is_developer(self.person1))
 
     def test_beer_per_day(self):
-        self.ds.set_default_credits_per_day(self.person1, 10)
-        self.assertEqual(10, self.ds.get_credits_per_day(self.person1))
-        self.ds.set_default_credits_per_day(self.person1, 20)
-        self.assertEqual(10, self.ds.get_credits_per_day(self.person1))
+        self.ds._set_default_credits_per_day(self.person1, 10)
+        self.assertEqual(10, self.ds._get_credits_per_day(self.person1))
+        self.ds._set_default_credits_per_day(self.person1, 20)
+        self.assertEqual(10, self.ds._get_credits_per_day(self.person1))
 
     def test_beer_remaining(self):
         self.ds.set_credits(self.person1, 10)
-        self.assertEqual(10, self.ds.get_credits(self.person1))
+        self.assertEqual(10, self.ds._get_credits(self.person1))
         self.ds.set_credits(self.person1, 20)
-        self.assertEqual(20, self.ds.get_credits(self.person1))
+        self.assertEqual(20, self.ds._get_credits(self.person1))
 
     def test_beer_last(self):
-        self.assertEqual(None, self.ds.get_last(self.person1))
+        self.assertEqual(None, self.ds._get_last(self.person1))
         nearly_now = datetime.datetime.now().replace(microsecond=0)
         self.ds.set_last(self.person1, nearly_now)
-        self.assertEqual(nearly_now, self.ds.get_last(self.person1))
+        self.assertEqual(nearly_now, self.ds._get_last(self.person1))
 
 
 if __name__ == '__main__':

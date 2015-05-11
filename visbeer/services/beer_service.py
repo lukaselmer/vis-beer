@@ -1,25 +1,6 @@
-import re
 import datetime
 import math
-from visbeer.services.data_service import DataService
-
-ENABLE_BEER_CONSUMPTION = True
-DEFAULT_CREDITS_PER_DAY = 2
-RFID_REGEX = re.compile(r"[0-9]{6}@rfid\.ethz\.ch")
-
-
-def beginning_of_current_day():
-    cutoff = datetime.time(3, 0)
-    if datetime.datetime.now().time() < cutoff:
-        day = datetime.date.today() - datetime.timedelta(days=1)
-    else:
-        day = datetime.date.today()
-    return datetime.datetime.combine(day, cutoff)
-
-
-def validate_rfid(rfid):
-    if not RFID_REGEX.match(rfid):
-        raise Exception('Invalid rfid')
+from visbeer.services.service_helper import validate_rfid, ENABLE_BEER_CONSUMPTION
 
 
 class BeerService:
@@ -31,7 +12,7 @@ class BeerService:
         self.person = data_service.find_person(rfid)
 
     def status(self):
-        if not ENABLE_BEER_CONSUMPTION and not self._is_developer():
+        if not ENABLE_BEER_CONSUMPTION and not self.data_service.is_developer(self.person):
             # enable API testing even if the beer consumption is disabled
             return 0
 
@@ -39,9 +20,9 @@ class BeerService:
             # allow only vis members to drink beer
             return 0
 
-        if not self._has_consumed_today():
+        if not self.data_service.has_consumed_today(self.person):
             # no consumption today -> reset the remaining value
-            self.data_service.set_credits(self.person, self._credits_per_day())
+            self.data_service.set_credits(self.person, self.data_service.credits_per_day(self.person))
 
         return self._remaining_beers()
 
@@ -56,25 +37,6 @@ class BeerService:
 
         return remaining_beers - 1
 
-    def _has_consumed_today(self):
-        last_consumption = self.data_service.get_last(self.person)
-
-        if not last_consumption:
-            # this is the case if someone never consumed a beverage until now
-            return False
-
-        return last_consumption >= beginning_of_current_day()
-
     def _remaining_beers(self):
         # for every 2 coffees, subtract on beer (at least)
-        return int(math.floor(self._remaining_credits() / 2.0))
-
-    def _is_developer(self):
-        return self.data_service.is_developer(self.person)
-
-    def _credits_per_day(self):
-        self.data_service.set_default_credits_per_day(self.person, DEFAULT_CREDITS_PER_DAY)
-        return self.data_service.get_credits_per_day(self.person)
-
-    def _remaining_credits(self):
-        return self.data_service.get_credits(self.person)
+        return int(math.floor(self.data_service.remaining_credits(self.person) / 2.0))
